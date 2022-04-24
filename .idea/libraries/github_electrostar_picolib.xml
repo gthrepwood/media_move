@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="github.electrostar.picolib" type="repository">
+    <properties maven-id="com.github.electrostar:picolib:0.0.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/electrostar/picolib/0.0.2/picolib-0.0.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna/4.5.2/jna-4.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/electrostar/picolib/0.0.2/picolib-0.0.2-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna/4.5.2/jna-4.5.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/electrostar/picolib/0.0.2/picolib-0.0.2-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna/4.5.2/jna-4.5.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
