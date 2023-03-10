@@ -1,5 +1,6 @@
-package com.tgervai.album;
+package com.tgervai.album.file;
 
+import com.tgervai.album.utils.StoreUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.*;
 
 
@@ -21,19 +23,19 @@ public class FilesDB implements Serializable {
     SortedSet<FileData> files;
 
     boolean changed = false;
-    HashMap<index, HashMap<String, List<FileData>>> indexes;
+    HashMap<Index, HashMap<String, List<FileData>>> indexes;
 
     @Autowired
     private StoreUtils<SortedSet<FileData>> storeUtils;
 
     public void index() {
         indexes = new HashMap<>();
-        for (index i : index.values()) {
+        for (Index i : Index.values()) {
             indexes.put(i, buildIndex(i));
         }
     }
 
-    private HashMap<String, List<FileData>> buildIndex(index name) {
+    private HashMap<String, List<FileData>> buildIndex(Index name) {
         HashMap<String, List<FileData>> idx = new HashMap<>();
         for (FileData file : files) {
             String key = file.get(name);
@@ -50,12 +52,13 @@ public class FilesDB implements Serializable {
         return idx;
     }
 
-    void saveDupes(String basepath) {
-        for (index name : index.values()) {
+    public void saveDupes(String basepath) {
+        for (Index name : Index.values()) {
+            FileWriter p = null;
             try {
                 String out = basepath + "/dupes_" + name + ".html";
                 log.debug("save dupe report: " + out);
-                FileWriter p = new FileWriter(out);
+                p = new FileWriter(out, Charset.defaultCharset());
 
                 if (indexes.get(name) != null) {
 
@@ -74,6 +77,14 @@ public class FilesDB implements Serializable {
                 }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
+            } finally {
+                if (p != null) {
+                    try {
+                        p.close();
+                    } catch (IOException e) {
+                        log.error("", e);
+                    }
+                }
             }
         }
 
@@ -107,12 +118,12 @@ public class FilesDB implements Serializable {
         changed = true;
     }
 
-    public List get(FileData file, index i) {
+    public List get(FileData file, Index i) {
         List list = (indexes.get(i)).get(file.get(i));
         return list == null ? new ArrayList() : list;
     }
 
-    enum index {
+    public enum Index {
         nameType, sizeType, dimType, gpsType
     }
 }

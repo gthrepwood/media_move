@@ -1,5 +1,6 @@
-package com.tgervai.album;
+package com.tgervai.album.cli;
 
+import com.tgervai.album.cli.MyCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;

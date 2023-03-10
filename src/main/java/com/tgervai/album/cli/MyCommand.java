@@ -1,5 +1,6 @@
-package com.tgervai.album;
+package com.tgervai.album.cli;
 
+import com.tgervai.album.SerachService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -47,6 +48,7 @@ public class MyCommand implements Callable<Integer> {
                         log.error("", e);
                     }
                 }
+                default: {}
             }
         }
 

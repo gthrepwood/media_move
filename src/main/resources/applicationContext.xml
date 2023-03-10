@@ -5,7 +5,7 @@
 <!--        xsi:schemaLocation="http://www.springframework.org/schema/beans-->
 <!--        http://www.springframework.org/schema/beans/spring-beans.xsd">-->
 
-<!--&lt;!&ndash;    <bean id="storeUtils" class="com.tgervai.album.StoreUtils"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="storeUtils" class="com.tgervai.album.utils.StoreUtils"/>&ndash;&gt;-->
 
 <!--</beans>-->
 <xml></xml>

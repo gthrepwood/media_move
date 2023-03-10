@@ -1,8 +1,8 @@
-package com.tgervai.album;
+package com.tgervai.album.file;
 
+import com.tgervai.album.checker.Checker;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Builder @Data
 public class FileExists {

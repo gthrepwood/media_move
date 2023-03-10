@@ -1,6 +1,8 @@
-package com.tgervai.album;
+package com.tgervai.album.checker;
 
-import static com.tgervai.album.FilesDB.index.nameType;
+import com.tgervai.album.file.FilesDB;
+
+import static com.tgervai.album.file.FilesDB.Index.nameType;
 
 public class NameChecker extends Checker {
 

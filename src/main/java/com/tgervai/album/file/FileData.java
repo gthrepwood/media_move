@@ -1,4 +1,4 @@
-package com.tgervai.album;
+package com.tgervai.album.file;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class FileData implements Comparable, Serializable {
         return size == a ? 0 : (size > a ? -1 : 1);
     }
 
-    public String get(FilesDB.index name) {
+    public String get(FilesDB.Index name) {
         return switch (name) {
             case nameType -> this.getNameForIndex();
             case sizeType -> String.valueOf(this.getSize());

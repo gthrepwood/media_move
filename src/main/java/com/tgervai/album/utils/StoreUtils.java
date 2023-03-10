@@ -1,5 +1,6 @@
-package com.tgervai.album;
+package com.tgervai.album.utils;
 
+import com.tgervai.album.config.Config;
 import jdk.jfr.Timespan;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class StoreUtils<T> {
     String filename;
     private Config config;
 
-    void save(Object obj) throws IOException {
+    public void save(Object obj) throws IOException {
         FileOutputStream f = new FileOutputStream(filename);
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(obj);
@@ -26,7 +27,7 @@ public class StoreUtils<T> {
     }
 
     @Timespan
-    T load(String filename) {
+    public T load(String filename) {
         this.filename = filename;
         T ts = null;
         try {

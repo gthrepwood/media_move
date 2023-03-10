@@ -1,4 +1,4 @@
-package com.tgervai.album;
+package com.tgervai.album.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

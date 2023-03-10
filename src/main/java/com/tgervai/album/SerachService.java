@@ -5,9 +5,16 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
+import com.tgervai.album.checker.*;
+import com.tgervai.album.config.Config;
+import com.tgervai.album.file.FileData;
+import com.tgervai.album.file.FileExists;
+import com.tgervai.album.file.FilesDB;
+import com.tgervai.album.utils.TimerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.awt.*;
 import java.io.File;
@@ -17,12 +24,14 @@ import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.*;
 
-import static com.tgervai.album.ConfigKeys.*;
+import static com.tgervai.album.config.ConfigKeys.data_file;
+import static com.tgervai.album.config.ConfigKeys.pictures_path;
 
 @Slf4j
 @Service
@@ -32,7 +41,7 @@ public class SerachService {
     @Autowired
     FilesDB files_db;
     @Autowired
-    private Config config;
+    Config config;
 
     public static boolean checkIfFileHasExtension(String s, String[] extn) {
         return Arrays.stream(extn).anyMatch(entry -> s.endsWith(entry));
@@ -61,16 +70,17 @@ public class SerachService {
     }
 
     private void prepareFilesDB() {
+        Assert.notNull(files_db, "files_db should not be null");
         try (TimerUtil ignored = new TimerUtil("loading data")) {
             files_db.load(config.getString(data_file));
-            if (files_db.files != null)
-                log.debug("loaded size: " + files_db.files.size());
+            if (files_db.getFiles() != null)
+                log.debug("loaded size: " + files_db.getFiles().size());
         }
 
-        if (files_db == null || files_db.files == null || files_db.getFiles().size() == 0) {
+        if (files_db == null || files_db.getFiles() == null || files_db.getFiles().size() == 0) {
             try (TimerUtil ignored = new TimerUtil("walk on files")) {
                 files_db.clear();
-                files_db.files = walk(new TreeSet<>(), config.getString(pictures_path));
+                files_db.setFiles(walk(new TreeSet<>(), config.getString(pictures_path)));
             }
             files_db.save();
         }
@@ -134,7 +144,7 @@ public class SerachService {
     }
 
 
-    void run(String srcPath) {
+    public void run(String srcPath) {
 //        String baseDir = config.getString(base_dir);
 //        log.debug("" + baseDir);
         Path temp;
@@ -147,7 +157,7 @@ public class SerachService {
             return;
         }
 
-        try (PrintWriter p = new PrintWriter(fos)) {
+        try (PrintWriter p = new PrintWriter(fos, true, Charset.defaultCharset())) {
             p.println("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Export</title></head><body>");
 
             prepareFilesDB();
@@ -163,10 +173,10 @@ public class SerachService {
                     new GPSChecker(files_db)
             );
 
-            List<FileExists> filesExists = new ArrayList<>();
+            List<FileExists> filesExists;
 
             for (FileData local : filesToCheck) {
-                log.debug(local.name + " ---");
+                log.debug(local.getName() + " ---");
                 boolean alltrue = true;
                 boolean allfalse = true;
                 for (Checker checker : requiredCheckers) {

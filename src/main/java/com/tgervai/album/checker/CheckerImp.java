@@ -1,4 +1,6 @@
-package com.tgervai.album;
+package com.tgervai.album.checker;
+
+import com.tgervai.album.file.FilesDB;
 
 public class CheckerImp {
 

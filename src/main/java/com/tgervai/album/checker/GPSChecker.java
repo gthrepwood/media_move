@@ -1,6 +1,8 @@
-package com.tgervai.album;
+package com.tgervai.album.checker;
 
-import static com.tgervai.album.FilesDB.index.gpsType;
+import com.tgervai.album.file.FilesDB;
+
+import static com.tgervai.album.file.FilesDB.Index.gpsType;
 
 public class GPSChecker extends Checker {
 

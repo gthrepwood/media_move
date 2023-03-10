@@ -1,5 +1,7 @@
-package com.tgervai.album;
+package com.tgervai.album.checker;
 
+import com.tgervai.album.file.FileData;
+import com.tgervai.album.file.FilesDB;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.List;
 public class Checker {
 
     final FilesDB files_db;
-    FilesDB.index type;
+    FilesDB.Index type;
 
     public List<Object> find(FileData src) {
         List<Object> list = files_db.get(src, type);
