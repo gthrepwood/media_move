@@ -27,8 +27,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static com.tgervai.album.config.ConfigKeys.data_file;
 import static com.tgervai.album.config.ConfigKeys.pictures_path;
@@ -81,6 +83,7 @@ public class SerachService {
             try (TimerUtil ignored = new TimerUtil("walk on files")) {
                 files_db.clear();
                 files_db.setFiles(walk(new TreeSet<>(), config.getString(pictures_path)));
+                log.debug("files scanned: " + files_db.getFiles().size());
             }
             files_db.save();
         }
