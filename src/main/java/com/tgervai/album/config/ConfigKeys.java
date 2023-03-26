@@ -1,15 +1,32 @@
 package com.tgervai.album.config;
 
+import lombok.Getter;
+
 public enum ConfigKeys {
-    base_dir(System.getProperty("user.home") + "/album_data"),
-    pictures_path("/mnt/sdb2/Photos"),
-    auto_save_config(true),
-    data_file(System.getProperty("user.home") + "/album_data/data_file.data"),
-    save_dupes(false);
+    execute("/home/crown/3"),
+    base_dir("{user.home}/album_data", "Base directory"),
+    pictures_path("/mnt/sdb2/Photos", "Path to pictures"),
+    data_file("{user.home}/album_data/data_file", "where to save the data file with filename"),
+    save_data_file(true),
+    read_from_filesdb(true),
+    save_config(false),
+    create_dupe_report(false),
+    check_dupes_same_dir(true),
+    save_object_gz(true),
+    save_json(true),
+    job_create_shell_result("{user.home}/");
+    @Getter
+    private String description;
+    @Getter
+    private Object defaultValue;
 
-    Object default_;
+    ConfigKeys(Object defaultValue) {
+        this.defaultValue = defaultValue;
+        this.description = "";
+    }
 
-    ConfigKeys(Object def) {
-        default_ = def;
+    ConfigKeys(Object defaultValue, String description) {
+        this.defaultValue = defaultValue;
+        this.description = description;
     }
 }

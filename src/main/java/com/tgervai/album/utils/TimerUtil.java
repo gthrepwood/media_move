@@ -8,13 +8,14 @@ import java.io.Closeable;
 public class TimerUtil implements Closeable {
 
     long t;
+    String name;
 
-    public TimerUtil(String text) {
+    public TimerUtil(String name) {
         t = System.currentTimeMillis();
-        log.debug(text);
+        this.name = name;
     }
 
     public void close() {
-        log.debug("Time: " + (System.currentTimeMillis() - t) / 1000.0);
+        log.debug("Timer end for: " + name + ": " + ((System.currentTimeMillis() - t) / 1000.0) + " sec");
     }
 }

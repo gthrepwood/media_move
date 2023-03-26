@@ -1,6 +1,0 @@
-{
-  "data_file": "{user.home}/album_data/data_file.data",
-  "base_dir": "{user.home}/album_data",
-  "pictures_path": "/mnt/sdb2/Photos",
-  "save_dupes": false
-}
