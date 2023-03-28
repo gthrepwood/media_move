@@ -10,8 +10,8 @@ public enum ConfigKeys {
     save_data_file(true),
     read_from_filesdb(true),
     save_config(false),
-    create_dupe_report(false),
-    check_dupes_same_dir(true),
+    create_dupe_report(true),
+    check_dupes_same_dir(false),
     save_object_gz(true),
     save_json(true),
     job_create_shell_result("{user.home}/");

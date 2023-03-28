@@ -3,10 +3,12 @@ package com.tgervai.album.file;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tgervai.album.db.Index;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 @Slf4j
@@ -14,7 +16,8 @@ import java.util.Date;
 @NoArgsConstructor
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonInclude
-public class FileData implements Serializable {
+@EqualsAndHashCode
+public class FileData implements Serializable, Comparable {
     String name;
     String path;
     Long size;
@@ -23,9 +26,9 @@ public class FileData implements Serializable {
     Double gpslat;
     Double gpslong;
     Date origDate;
-
     String error;
 
+    //    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     public String get(Index name) {
         return switch (name) {
             case nameType -> this.getNameForIndex();
@@ -33,7 +36,13 @@ public class FileData implements Serializable {
             case dimType -> this.getDimForIndex();
             case gpsType -> this.getGpslatLongForIndex();
             case fullpath -> this.getFullpath();
+            case hash -> this.getHash();
         };
+    }
+
+    private String getHash() {
+        return Arrays.asList(name, size, height, width, gpslat, gpslong).toString();
+//        return /*String.valueOf(Objects.hashCode(*/name + path + size + height + width + gpslat + gpslong/*))*/;
     }
 
     private String getFullpath() {
@@ -57,5 +66,10 @@ public class FileData implements Serializable {
 
     String getNameForIndex() {
         return name.toLowerCase();
+    }
+
+    @Override
+    public int compareTo(final Object o) {
+        return Integer.valueOf(o.hashCode()).compareTo(hashCode());
     }
 }

@@ -32,7 +32,7 @@ public class Database implements Serializable {
     Config config;
     boolean changed = false;
     @Getter
-    private HashMap<Index, HashMap<String, List<FileData>>> indexes;
+    private HashMap<Index, HashMap<String, Set<FileData>>> indexes;
 
     @Autowired
     private StoreUtils<SortedSet<FileData>> storeUtils;
@@ -44,14 +44,14 @@ public class Database implements Serializable {
         }
     }
 
-    synchronized HashMap<String, List<FileData>> buildIndex(Index name) {
-        HashMap<String, List<FileData>> idx = new HashMap<>();
+    synchronized HashMap<String, Set<FileData>> buildIndex(Index name) {
+        HashMap<String, Set<FileData>> idx = new HashMap<>();
         for (FileData file : getFiles()) {
             String key = file.get(name);
             if (key != null) {
-                List list = idx.get(key);
+                Set list = idx.get(key);
                 if (list == null) {
-                    list = new ArrayList();
+                    list = new HashSet();
                 }
                 list.add(file);
                 idx.put(key, list);
@@ -96,9 +96,9 @@ public class Database implements Serializable {
         db_inited = false;
     }
 
-    public List<FileData> get(FileData file, Index i) {
-        List list = (indexes.get(i)).get(file.get(i));
-        return list == null ? new ArrayList() : list;
+    public Set<FileData> get(FileData file, Index i) {
+        Set set = (indexes.get(i)).get(file.get(i));
+        return set == null ? new HashSet() : set;
     }
 
     public boolean exists(FileData file, Index i) {

@@ -35,7 +35,9 @@ public class FileUtils  implements Serializable {
                 ts = walk(ts, f.getAbsolutePath());
             } else {
                 if (!checkIfFileHasExtension(f.getName(), skipExt)) {
-                    FileData f1 = readMetadata(f);
+
+                    FileData f1 = new FileData();
+                    // readMetadata(f);
                     f1.setName(f.getName());
                     f1.setPath(f.getPath());
                     f1.setSize(f.length());

@@ -5,6 +5,7 @@ import com.tgervai.album.db.Database;
 import com.tgervai.album.db.DatabaseChecker;
 import com.tgervai.album.db.Index;
 import com.tgervai.album.file.CheckUtils;
+import com.tgervai.album.file.DupeList;
 import com.tgervai.album.file.FileData;
 import com.tgervai.album.file.FileExists;
 import com.tgervai.album.utils.FileUtils;
@@ -13,12 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
-import static com.tgervai.album.config.ConfigKeys.*;
+import static com.tgervai.album.config.ConfigKeys.create_dupe_report;
+import static com.tgervai.album.config.ConfigKeys.execute;
 import static com.tgervai.album.db.Index.*;
 
 @Slf4j
@@ -34,7 +33,6 @@ public class SearchService {
     FileUtils fileUtils;
     @Autowired
     OutputUtils outputUtils;
-
     @Autowired
     CheckUtils checkUtils;
 
@@ -46,6 +44,7 @@ public class SearchService {
 
         database.reload();
 
+/*
         if (config.isValue(check_dupes_same_dir)) {
             HashMap<String, List<FileData>> names = database.getIndexes().get(fullpath);
             for (String nameInDb : names.keySet()) {
@@ -56,9 +55,12 @@ public class SearchService {
             }
             return;
         }
+*/
 
         if (config.isValue(create_dupe_report)) {
-            databaseChecker.saveDupes(config.getValue(pictures_path));
+            DupeList dupeList = databaseChecker.searchDuplicatedByType(hash);
+            final HashMap<String, DupeList> list = databaseChecker.searchDuplicate();
+            log.debug(dupeList + "");
         }
 
         SortedSet<FileData> filesToCheck = fileUtils.walk(new TreeSet<>(), source);
@@ -73,9 +75,9 @@ public class SearchService {
             if (exists.size() > 0) {
                 log.debug("  " + local.getName() + " [exists] " + exists);
                 if (!exists.contains(sizeType) && exists.contains(nameType)) {
-                    List<FileData> list = database.get(local, nameType);
-                    list.forEach(f -> log.debug("   " + local.getSize() + " [vs] " + f.getSize()));
-                    list.forEach(f -> log.debug("   file://" + local.getPath() + " [vs] file://" + f.getPath()));
+                    Set<FileData> set = database.get(local, nameType);
+                    set.forEach(f -> log.debug("   " + local.getSize() + " [vs] " + f.getSize()));
+                    set.forEach(f -> log.debug("   file://" + local.getPath() + " [vs] file://" + f.getPath()));
                 }
             }
         }
